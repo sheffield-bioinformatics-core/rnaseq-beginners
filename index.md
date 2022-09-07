@@ -22,6 +22,21 @@ email: [bioinformatics-core\@sheffield.ac.uk](bioinformatics-core@sheffield.ac.u
 
 # Workshop Overview
 
+
+## Objectives:- After this course you should be able to:
+
+- Appreciate some of the issues that can arise when designing an RNA-seq experiment 
+- Interpret an Multi-dimensional scaling (MDS) plot to check for batch effects and confounding factors
+- Use Degust to generate a statistically robust gene list
+- Perform a gene set enrichment analysis using available online tools
+
+## Aims:- During this course you will learn about:
+
+- Basic principles of Experimental design for RNA-seq experiments
+- The steps in a best-practice pipeline for RNA-seq analysis
+- Configuring the Degust interface to perform different types of differential expression
+- The theory behind popular methods for pathways and gene set enrichment analysis
+
 An overall workflow for the processing and analysis of RNA-seq data is given in the image below from [Ting-You Wang's RNA-seq analysis page](https://databeauty.com/blog/tutorial/2016/09/13/RNA-seq-analysis.html).
 
 ![](https://databeauty.com/figures/2016-09-13-RNA-seq-analysis/rna_seq_workflow.png)
@@ -35,6 +50,63 @@ For those interested in alignment and QC steps, we have some materials available
 **We will also have some courses on using the command-line and the nextflow workflow manager to process raw RNA-seq data.**
 
 However, regardless of whatever method you use to process the data, decisions that you make before commencing sequencing can have a huge impact on the results.
+
+## Background videos
+
+A short introduction to Next Generation Sequencing can be found in this youtube video
+
+- [Next Generation Sequencing (Illumina) An Introduction - Henrik’s Lab](https://www.youtube.com/watch?v=CZeN-IgjYCo)
+
+A good overview of RNA-seq analysis can be found here
+
+- [StatQuest: A gentle introduction to RNA-seq](https://www.youtube.com/watch?v=tlf6wYJrwKY)
+
+
+## RNA-seq pre-processing **In Brief**
+
+We will now *briefly* describe the processes involving in turning raw sequencing data into the data that we will be using in this workshop.
+
+### Raw RNA-seq data
+
+Raw raw-seq data are delivered in the form of *fastq* files. These are large (typically several Gb) that contain information on the sequences that have been generated for each biological sample; one fastq (or pair of fastqs) for each sample. Each set of four lines describe one sequence (called a "read").
+
+A typical RNA-seq experiment will have 10 - 30 million reads in a fastq file, with each read about 100 bases long
+
+```
+@D0UW5ACXX120511:8:1204:6261:40047/1
+AATGTTTATGTTCTTAAATTTTAGTTGTATATGTGAATCTTTGTAGTTTTTGCTAAAATACTAAGTAATTTATATAAAAGTGAGTTAAGAGATTTTTCTGA
++
+CCCFFFFFHHHHHJJJJJIJJJJJIJJHIIJIJIJJIJJJIJJHIIHIJJJJJJBEGIHIJICGIDICFGIJJJIIJJGJ>F>GAGCGEEHEHHEEFFFD>
+```
+
+
+Quality assessment can be performed to see if the raw sequences are of sufficient quality for analysis
+
+![](media/fastqc-2b.png)
+
+As the fastq files are large, we tend to analyse them using command-line software and a computing cluster
+
+### RNA-seq alignment
+
+The *traditional workflow for RNA-seq* compares the sequences to a reference genome to see which genomic region each read matches the best.
+
+<img src="https://training.galaxyproject.org/training-material/topics/sequence-analysis/images/mapping/mapping.png"/>
+
+Again, this requires more memory than a typical laptop or desktop machine so is performed on a remote computer with large memory. The resulting file is called a *bam* and records the best genomic match for each read. However, as we are interested in gene expression we want to relate these mappings to the positions of genes.
+
+### Assigning reads to features
+
+A variety of different counting methods can determine how many reads overlap each known gene region. These are know as the raw counts and are the kind of data we will start with today.
+
+![](media/htseq.png)
+
+Recent tools for RNA-seq analysis (e.g. `salmon`, `kallisto`) do not require the time-consuming step of whole-genome alignment to be performed, and can therefore produce gene-level counts in a much faster time frame. They not require the creation of large bam files, which is useful if constrained by file space on Galaxy.
+
+![](https://hbctraining.github.io/Intro-to-rnaseq-hpc-gt/img/alignmentfree_workflow_aug2017.png)
+
+(image from Harvard Bioinformatics Core)
+
+
 
 ## Experimental Design
 
