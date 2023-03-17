@@ -186,8 +186,9 @@ R-based methods such as `edgeR` (implemented in Degust) and `DESeq2` have their 
 
 We will use a previously-published count matrix. This was downloaded from the Gene Expression Omnibus (GEO) under the accession number [GSE60450](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE60450). Note that we have shortened the column headings and added gene symbols to help with visualisation and annotation
 
+
 ::: exercise
-Download the counts from [this link](GSE60450_Lactation-GenewiseCounts_rename_symbol.csv)
+Download the counts from [this link](GSE60450_Lactation_forAnalysis.csv)
 :::
 
 ### Uploading the count matrix to Degust
@@ -485,7 +486,7 @@ Hopefully it should recognise your input without any errors, and on the next scr
 If your data does not get uploaded, double-check that the column heading **basal.lactation** has not been pasted into the text box
 :::
 
-To make the analysis run faster, you can de-select the GO pathways (biological processes, molecular function and cellular compartment)
+To make the analysis run faster, you can de-select the GO pathways (biological processes, molecular function and cellular compartment). However, in practice you would probably want to include these.
 
 <img src="media/genetrail_setup.PNG"/>
 
