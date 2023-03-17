@@ -62,7 +62,7 @@ A good overview of RNA-seq analysis can be found here
 - [StatQuest: A gentle introduction to RNA-seq](https://www.youtube.com/watch?v=tlf6wYJrwKY)
 
 
-## RNA-seq pre-processing **In Brief**
+## RNA-seq pre-processing **In brief**
 
 We will now *briefly* describe the processes involving in turning raw sequencing data into the data that we will be using in this workshop.
 
@@ -141,7 +141,7 @@ When planning next-generation sequencing experiments, you will also need to cons
 
 Some recommendations on these questions and more are provided by the [Cancer Research Uk Cambridge Institute Genomics Core](https://www.cruk.cam.ac.uk/core-facilities/genomics-core/sequencing). Often the sequencing vendor performing your experiment will have some default options available.
 
-The vendor may not advise on the *sample-size*; how many samples you will be sequencing to address your biological hypothesis of interest. This is a complex question and is often influenced by practical and financial constraints. The Sheffield Bioinformatics Core is able to advise on this, and any of the other issues above. `bioinformatics-core@sheffield.ac.uk`
+The vendor may not advise on the *sample-size*; how many samples you will be sequencing to address your biological hypothesis of interest. This is a complex question and is often influenced by practical and financial constraints. For researchers based in Sheffield, The Sheffield Bioinformatics Core is able to advise on this, and any of the other issues above. `bioinformatics-core@sheffield.ac.uk`
 
 # Differential expression
 
@@ -150,7 +150,7 @@ The vendor may not advise on the *sample-size*; how many samples you will be seq
 A differential expression analysis requires two input files to be created.
 
 -   a count matrix
--   a sample information table
+-   a sample sheet or meta data table
 
 The count matrix can be obtained by performing quantification (outside the scope of this workshop...). This will usually be generated for you by the sequencing vendor or Bioinformatics Core. The structure of the count matrix is shown below.
 
@@ -160,7 +160,7 @@ The count matrix can be obtained by performing quantification (outside the scope
 |    B     |     20      |     10      |
 | **...**  |   **...**   |   **...**   |
 
-The gene named A was sequenced 1500 times on sampleA and 900 times on sampleB etc. These are referred to as *raw counts*, and cannot just put this numbers into a standard statistical test (e.g. t-test) to assess significance. There are several reasons for this.
+The gene named A was sequenced 1500 times on sampleA and 900 times on sampleB etc. These are referred to as *raw counts*. However, we cannot just put this numbers into a standard statistical test (e.g. t-test) to assess significance. There are several reasons for this.
 
 -   The count values do not follow a normal-distribution so cannot be analysed using traditional methods
 -   There are many, many genes being measured in the dataset leading to a multiple testing problem.
@@ -168,7 +168,17 @@ The gene named A was sequenced 1500 times on sampleA and 900 times on sampleB et
     -   size of gene; *longer* genes will have more reads assigned to them
     -   library size; for a sample that is sequenced to a higher depth it will seem as though all genes are more highly-expressed.
 
+The sample sheet or meta data is used to associate each column in the count matrix to 
+
+| **Name** | **Condition** | **Gender** | **Batch** |
+|:--------:|:-----------:|:-----------:|:-----------:|
+|    sampleA     |    Healthy     |     M     | 1
+|    sampleB     |     Disease      |     F      | 1
+| sampleC  |   Disease   |   M   | 2
+
 The term *differential expression* was first used to refer to the process of finding statistically significant genes from a *microarray* gene expression study.
+
+In this figure we show the expression level measured for a gene in a number of different samples. Each sample belongs to biological condition A or B. We are interested in whether the expression level of the gene is different in condition A or B (which could represent healthy or disease individuals, for example).
 
 ![](media/de_explained.png)
 
@@ -236,11 +246,6 @@ Download the counts from [this link](GSE60450_Lactation_forAnalysis.csv)
 
 ![](http://sepsis-omics.github.io/tutorials/modules/dge/images/image12.png)
 
-### MDS plot
-
-This is a multidimensional scaling plot which represents the variation between samples. It is a similar concept to a Principal Components Analysis (PCA) plot. The x-axis is the dimension with the highest magnitude. In a standard control/treatment setup, samples should be split along this axis. A desirable plot is shown below:-
-
-![](media/degust_mds.png)
 
 ## MA-plot
 
@@ -281,8 +286,8 @@ Table of genes
 
 -   gene_id: names of genes. Note that gene names are sometimes specific to a species, or they may be only named as a locus ID (a chromosomal location specified in the genome annotation).
 -   FDR: False Discovery Rate. This is an adjusted p value to show the significance of the difference in gene expression between two conditions. Click on column headings to sort. By default, this table is sorted by FDR.
--   basal and luminal: log2(Fold Change) of gene expression. The default display is of fold change in the treatment relative to the control. Therefore, values in the batch column are zero. This can be changed in the Options panel at the top right.
-    -   In some cases, a large fold change will be meaningful but in others, even a small fold change can be important biologically.
+- log2(Fold Change) of gene expression. This shows the fold-change (on a log$_2$ scale) of each gene relative to the group of samples chosen as the baseline. A positive value (coloured in red) indicates the gene is higher compared to the baseline, and negative indicates that it is lower. The direction of the comparison can be changed in the Options panel, but this just changes the sign (positive or negative) and not corresponding the p-value.
+  + the direction of fold-change should be determined based on your biological question. For example, if you were sequencing treatment and control groups it would make sense to make the fold-changes relative to the control. Similarly for disease and healthy groups it would make sense to look at changes relative to the healthy group.
 
 The table can be sorted according to any of the columns (e.g. fold-change or p-value)
 
@@ -291,6 +296,13 @@ The table can be sorted according to any of the columns (e.g. fold-change or p-v
 Above the genes table is the option to download the results of the current analysis to a csv file. You can also download the *R* code required to reproduce the analysis by clicking the *Show R code* box underneath the Options box.
 
 Plots such as the MDS, MA and heatmap can also be exported by right-clicking on the plot.
+
+## MDS plot
+
+This is a multidimensional scaling plot which represents the variation between samples. It is a similar concept to a Principal Components Analysis (PCA) plot. The x-axis is the dimension with the highest magnitude. In a standard control/treatment setup, samples should be split along this axis. A desirable plot is shown below:-
+
+![](media/degust_mds.png)
+
 
 ## Exercise
 
@@ -306,12 +318,11 @@ Plots such as the MDS, MA and heatmap can also be exported by right-clicking on 
 
 Comparing Basal vs Luminal wasn't really the main question of interest in the dataset, but it serves to illustrate the importance of checking QC plots.
 
--   Create conditions *Basal.Pregnant*, *Basal.Lactation*, etc using the corrected experimental design
+-   Create conditions *Basal.Pregnant*, *Basal.Lactation*, etc using the **corrected experimental design**
 -   Make sure that *Basal.Pregnant* and *Basal.Lactation* are both ticked as initial select
 
 ![](media/degust-correct-config.png)
 
-Take some time to understand the various parts of the report
 
 ::: exercise
 **Exercise:** Make sure the FDR cut-off and abs LogFC cutoffs are set to default and *download* the file and rename to `background.csv`. We will use this later.
@@ -374,11 +385,19 @@ The hidden factor method can be used to analyse datasets where samples cluster o
 -   sample batch
 -   gender
 
+In the below example, the main factor separating the samples is the experimental batch and not group (IR, CTR or TGF)
+
 ![](media/batch_effect.png)
 
-However, this is only true if your **experimental design was correct** and the technical variation is not confounded with biological groups. e.g. treated and untreated samples should be in all batches
+However, the hidden factor approach can only be used if your **experimental design was robust** and the technical variation is not confounded with biological groups. e.g. treated and untreated samples should be in all batches
 
 # Enrichment and Pathways Analysis
+
+The differential expression step is concerned with being able to say with confidence whether an individual gene has a different level of expression between biological groups. However, in this section we move towards discovering if our results are ***biologically significant***. Are the genes that we have picked statistical flukes, or are there some commonalities?
+
+It can be informative to scan (manually) through the gene lists we generate through Degust and use our Biological intuition to look for themes. We might also look for previously-published genes, or genes that we have intentionally-manipulated (e.g. by knocking-out that gene). However, sometimes we can mislead ourselves into thinking our results are more significant than they really are.
+
+For example, the "cell cycle process" Gene Ontology has many hundreds of genes belonging to it. If we were to pick a set of genes **at random** of equivalent size as our list of differentially-expressed genes **we should not be surprised** to see a lot of cell-cycle genes appearing in the list. This is just due to the fact that we had a lot of possible cell-cycle genes to choose from. The key question is whether the number of cell-cycle (or any other pathway) is *more than we would expect by chance*.
 
 In this section we will use the following files
 
@@ -387,13 +406,13 @@ In this section we will use the following files
 
 It will be helpful to have both these files open in Excel.
 
-In this section we move towards discovering if our results are ***biologically significant***. Are the genes that we have picked statistical flukes, or are there some commonalities.
+
 
 There are two different approaches one might use, and we will cover the theory behind both. The distinction is whether you are happy to use a hard (and arbitrary) threshold to identify DE genes.
 
 ## Over-representation analysis
 
-"Threshold-based" methods require defintion of a statistical threshold to define list of genes to test (e.g. FDR \< 0.01). Then a *hypergeometric* test or *Fisher's Exact* test is generally used. These are typically used in situations where plenty of DE genes have been identified, and people often use quite relaxed criteria for identifying DE genes (e.g. raw rather than adjusted p-values or FDR value)
+"Threshold-based" methods require defintion of a statistical threshold to define list of genes to test (e.g. FDR \< 0.01). Then a *hypergeometric* test or *Fisher's Exact* test is generally used. These methods require plenty of DE genes as an input, so people often use more-relaxed criteria for identifying DE genes (e.g. raw rather than adjusted p-values or FDR value but in conjuction with a fold-change cut-off)
 
 The question we are asking here is;
 
@@ -406,7 +425,7 @@ We can answer this question by knowing
 -   the number of genes in the gene set that are found to be DE
 -   the total number of tested genes (background)
 
-The formula for Fishers exact test is;
+You will never need to know this, but for those interested  the formula for Fishers exact test is;
 
 $$ p = \frac{\binom{a + b}{a}\binom{c +d}{c}}{\binom{n}{a +c}} = \frac{(a+b)!(c+d)!(a+c)!(b+d)!}{a!b!c!d!n!} $$
 
@@ -455,11 +474,13 @@ Below the figure is the results table. This links to more information about each
 
 ![](media/GOrilla-table.PNG)
 
+The Genes column can be expanded to display the names of genes that correspond to a particular pathway.
+
 ::: exercise
 **Exercise:** Use GOrilla to find enriched pathways in the Basal pregnant vs lactation analysis
 :::
 
-
+You might discover that some of the significant pathways share a lot of genes in common, which can complicate the interpretation of the results. There are several visualisations that can help in this situation. For example, clicking the *Show output also in REVIGO* option on the GOrilla front page will allow you to export the results to the [REVIGO](http://revigo.irb.hr/) website for further interpretation.
 
 ## Threshold-free analysis
 
@@ -490,16 +511,16 @@ To make the analysis run faster, you can de-select the GO pathways (biological p
 
 <img src="media/genetrail_setup.PNG"/>
 
-After a short wait, you will be able to view and download the results. The tested pathways are grouped into different sources (Kegg, Reactome or Wikipathways)
+After a short wait, you will be able to view and download the results. The tested pathways are grouped into different sources (Kegg, Reactome or Wikipathways). The type column indicates whether the pathway is depleted (genes have a tendancy to be over-expressed) or enriched (genes have a tendancy to under-expressed). 
 
 <img src="media/genetrail_KEGG.PNG"/>
 
-Each of the significant pathways can be explored in detail by clicking the **More..** link; such as showing which genes in that pathways are up- or downregulated.
+Each of the significant pathways can be explored in detail by clicking the **More..** link; such as showing which genes in the identified pathways are over- or under-expressed.
 
 <img src="media/genetrail_KEGG_result.PNG"/>
 
-The Rank of the gene shown is the position of the gene in the ranked list; with 1 being most up-regulated gene. The score is the score used to rank the genes (fold-change in our example).
+The Rank of the gene shown is the position of the gene in the ranked list; with 1 being most up-regulated gene. The score is the score used to rank the genes (fold-change in our example). You will have to refer back to your Degust analysis to recall which biological group the fold-change is relative to.
 
 ::: exercise
-**Exercise:** Use GeneTrail to analyse
+**Exercise:** Use GeneTrail to identify enriched pathways in the Basal Pregnant vs Lactation contrast. Compare the results from the most depleted and enriched pathways and make sure that you can interpet the barcode plot.
 :::
