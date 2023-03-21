@@ -410,9 +410,9 @@ It will be helpful to have both these files open in Excel.
 
 There are two different approaches one might use, and we will cover the theory behind both. The distinction is whether you are happy to use a hard (and arbitrary) threshold to identify DE genes.
 
-## Over-representation analysis
+## Over-representation analysis (ORA)
 
-"Threshold-based" methods require defintion of a statistical threshold to define list of genes to test (e.g. FDR \< 0.01). Then a *hypergeometric* test or *Fisher's Exact* test is generally used. These methods require plenty of DE genes as an input, so people often use more-relaxed criteria for identifying DE genes (e.g. raw rather than adjusted p-values or FDR value but in conjuction with a fold-change cut-off)
+"Threshold-based" methods require definition of a statistical threshold to define list of genes to test (e.g. FDR \< 0.01). Then a *hypergeometric* test or *Fisher's Exact* test is generally used. These methods require plenty of DE genes as an input, so people often use more-relaxed criteria for identifying DE genes (e.g. raw rather than adjusted p-values or FDR value but in conjuction with a fold-change cut-off)
 
 The question we are asking here is;
 
@@ -439,52 +439,53 @@ with:-
 
 In this first test, our genes will be grouped together according to their Gene Ontology (GO) terms:- <http://www.geneontology.org/>
 
-## Using GOrilla
+## Using WebGestalt for ORA
+
+<div class="information">
+**N.B.** Previous version of this course used the website GOrilla for this section. However, at the time of writing this site no longer seems to be working. We have switched to using WebGestalt which can perform the same statistical tests as GOrilla and has a nicer interface.
+</div>
 
 There are several popular online tools for performing enrichment analysis
 
-We will be using the online tool [GOrilla](http://cbl-gorilla.cs.technion.ac.il/) to perform the pathways analysis. It has two modes; the first of which accepts a list of *background* and *target* genes.
+We will be using the online tool [WebGestalt](https://www.webgestalt.org/) to perform the pathways analysis. It supports has various types of analysis; the first of which accepts a list pre-selected genes.
 
-1.  Go to <http://cbl-gorilla.cs.technion.ac.il/>
-2.  Read the "Running Example"
+1.  Go to <https://www.webgestalt.org/#>
+2.  Choose the **ORA Sample Run** Tab
 
-![](media/gorilla-example.png)
+![](media/webgestalt_1.png)
 
 3.  Choose Organism: `Mus Musculus`
-4.  Choose running mode: `Two unranked lists of genes`
-5.  Paste the gene symbols corresponding to DE genes in *Basal pregant vs Basal Lactation* into the Target set.
+4.  Make sure that **Method of interest** is set to Over-Representation Analysis (ORA)
+5.  Select **Functional Database** *geneontology*
+  + you can change this later if you wish
+6.  Keep **Select Gene ID Type* as *Gene symbol*
+7.  Paste the gene symbols corresponding to DE genes in *Basal pregant vs Basal Lactation* into the Upload Gene List box.
 
 -   **The shortcut CTRL + SPACE will let you select an entire column**
 
-6.  Paste the gene symbols from the Background set into the other box.
-7.  Choose an Ontology: `Process`
-8. Under **Advanced parameters** you can tick the option to *Output results in Microsoft Excel format*
-9.  `Search Enriched GO terms`
+8. In **Select Reference Set** make sure *genome protein-coding* is selected.
+9. Click Submit
 
-You should be presented with a graph of enriched GO terms showing the relationship between the terms. Each GO term is coloured according to its statistical significance.
 
-![](media/GOrilla-network.PNG)
+The first figure that appears
 
-Below the figure is the results table. This links to more information about each GO term, and lists each gene in the category that was found in your list. The enrichment column gives 4 numbers that are used to determine enrichment (similar to the Fisher exact test we saw earlier)
+![](media/webgestalt_2.png)
 
--   N, total number of genes (should be the same in all rows)
--   B, total number of genes annotated with the GO term
--   n, total number of genes that were found in the list you uploaded (same for all rows)
--   b, number of genes in the list you uploaded that intersect with this GO term
+The table output shows details of the most over-represented pathwways. Click on a pathway name in the left-hand column gives more information on the genes belonging to that pathway
 
-![](media/GOrilla-table.PNG)
 
-The Genes column can be expanded to display the names of genes that correspond to a particular pathway.
+![](media/webgestalt_3.png)
+
 
 ::: exercise
-**Exercise:** Use GOrilla to find enriched pathways in the Basal pregnant vs lactation analysis
+**Exercise:** Use WebGestalt to find enriched pathways in the Basal pregnant vs lactation analysis
 :::
 
-You might discover that some of the significant pathways share a lot of genes in common, which can complicate the interpretation of the results. There are several visualisations that can help in this situation. For example, clicking the *Show output also in REVIGO* option on the GOrilla front page will allow you to export the results to the [REVIGO](http://revigo.irb.hr/) website for further interpretation.
+
 
 ## Threshold-free analysis
 
-This type of analysis is popular for datasets where differential expression analysis does not reveal many genes that are differentially-expressed on their own. Instead, it seeks to identify genes that as a group have a tendancy to be near the extremes of the log-fold changes. The results are typically presented in the following way.
+This type of analysis is popular for datasets where differential expression analysis does not reveal many genes that are differentially-expressed on their own. Instead, it seeks to identify genes that as a group have a tendency to be near the extremes of the log-fold changes. The results are typically presented in the following way.
 
 ![](media/overexpressed-gsea.png)
 
@@ -492,14 +493,19 @@ The "barcode"-like panel represents where genes from a particular pathway (**HAL
 
 As such, it does not rely on having to impose arbitrary cut-offs on the data. Instead, we need to provide a measure of the importance of each gene such as it's fold-change. These are then used the rank the genes.
 
-The Broad institute has made this analysis method popular and provides [a version of GSEA](http://software.broadinstitute.org/gsea/index.jsp) that can be run via a java application. However, the application can be a bit fiddly to run, so we will use the GeneTrail website instead
+The Broad institute has made this analysis method popular and provides [a version of GSEA](http://software.broadinstitute.org/gsea/index.jsp) that can be run via a java application. However, the application can be a bit fiddly to run, so we will use the Webgestalt website again
 
-<https://genetrail.bioinf.uni-sb.de/start.html>
+<https://www.webgestalt.org/#>
 
--   Open the file `background.csv` in Excel and delete all columns except the `SYMBOL` and `basal.lactation` column. <img src="media/GeneTrail_prep.png"/>
--   Go to the GeneTrail website, and select Transcriptomics from the front page
--   Select the **Paste the content of a text file in a tabular format option** and the contents of your modified excel file into the box. **Do not paste the column headings**
--   Click Upload
+-   Open the file `background.csv` in Excel and delete all columns except the `SYMBOL` and `basal.lactation` column. <img src="media/webgestalt_4.png"/>
+-   Go to the Webgestalt website, and select **GSEA Sample Run** from the front page
+-   Make sure **Method of interest** is set to *Gene Set Enrichment Analysis (GSEA)*
+-  Select **Functional Database** as *geneontology*
+-   Paste the contents of your modified excel file into the text box under **Upload Gene List**. 
+<div class ="information">
+Do not paste the header line of **SYMBOL** and **basal.lactation** into the box
+</div>
+-   Click **Submit**
 
 Hopefully it should recognise your input without any errors, and on the next screen the **Set-level statistic** should be automatically set to **GSEA**
 
