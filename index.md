@@ -467,12 +467,11 @@ We will be using the online tool [WebGestalt](https://www.webgestalt.org/) to pe
 9. Click Submit
 
 
-The first figure that appears
+The page that appears can give a summary of the analysis performed (i.e. the number of genes that were used as input and how many names were recognised as valid gene names) along with various visualisations. The *bar plot* shows the amount of enrichment for the pathways identified as being significant. A larger enrichment score indicates for a pathway indicates that genes are found in the list of gene names **more than you would expect by chance**. However, the pathways with the largest enrichment are not neccesarily the most significant.
 
 ![](media/webgestalt_2.png)
 
-The table output shows details of the most over-represented pathwways. Click on a pathway name in the left-hand column gives more information on the genes belonging to that pathway
-
+The table output shows details of the most over-represented pathways. Clicking on a pathway name in the left-hand column gives more information on the genes belonging to that pathway - including the names of genes in that pathway that were found in the list of genes. The **Expect** and **Ratio** columns indicate how many genes in a pathway that are *expected* to be found in the uploaded gene list, and how many more times genes in the pathway *actually occur* in the gene list. All columns in the table can be sorted.
 
 ![](media/webgestalt_3.png)
 
@@ -507,26 +506,12 @@ Do not paste the header line of **SYMBOL** and **basal.lactation** into the box
 </div>
 -   Click **Submit**
 
-Hopefully it should recognise your input without any errors, and on the next screen the **Set-level statistic** should be automatically set to **GSEA**
 
-::: warning
-If your data does not get uploaded, double-check that the column heading **basal.lactation** has not been pasted into the text box
-:::
 
-To make the analysis run faster, you can de-select the GO pathways (biological processes, molecular function and cellular compartment). However, in practice you would probably want to include these.
-
-<img src="media/genetrail_setup.PNG"/>
-
-After a short wait, you will be able to view and download the results. The tested pathways are grouped into different sources (Kegg, Reactome or Wikipathways). The type column indicates whether the pathway is depleted (genes have a tendancy to be over-expressed) or enriched (genes have a tendancy to under-expressed). 
-
-<img src="media/genetrail_KEGG.PNG"/>
-
-Each of the significant pathways can be explored in detail by clicking the **More..** link; such as showing which genes in the identified pathways are over- or under-expressed.
-
-<img src="media/genetrail_KEGG_result.PNG"/>
+<img src="media/webgestalt_5.png"/>
 
 The Rank of the gene shown is the position of the gene in the ranked list; with 1 being most up-regulated gene. The score is the score used to rank the genes (fold-change in our example). You will have to refer back to your Degust analysis to recall which biological group the fold-change is relative to.
 
 ::: exercise
-**Exercise:** Use GeneTrail to identify enriched pathways in the Basal Pregnant vs Lactation contrast. Compare the results from the most depleted and enriched pathways and make sure that you can interpet the barcode plot.
+**Exercise:** Use Webgestalt to identify enriched pathways in the Basal Pregnant vs Lactation contrast. Compare the results from the most depleted and enriched pathways and make sure that you can interpret the barcode plot.
 :::
