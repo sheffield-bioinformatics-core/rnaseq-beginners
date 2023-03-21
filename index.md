@@ -445,9 +445,7 @@ In this first test, our genes will be grouped together according to their Gene O
 **N.B.** Previous version of this course used the website GOrilla for this section. However, at the time of writing this site no longer seems to be working. We have switched to using WebGestalt which can perform the same statistical tests as GOrilla and has a nicer interface.
 </div>
 
-There are several popular online tools for performing enrichment analysis
-
-We will be using the online tool [WebGestalt](https://www.webgestalt.org/) to perform the pathways analysis. It supports has various types of analysis; the first of which accepts a list pre-selected genes.
+There are several popular online tools for performing enrichment analysis We will be using the online tool [WebGestalt](https://www.webgestalt.org/) to perform the pathways analysis. It supports various types of analyses; the first of which accepts a list of pre-selected genes to perform an *ORA*.
 
 1.  Go to <https://www.webgestalt.org/#>
 2.  Choose the **ORA Sample Run** Tab
@@ -455,19 +453,21 @@ We will be using the online tool [WebGestalt](https://www.webgestalt.org/) to pe
 ![](media/webgestalt_1.png)
 
 3.  Choose Organism: `Mus Musculus`
-4.  Make sure that **Method of interest** is set to Over-Representation Analysis (ORA)
-5.  Select **Functional Database** *geneontology*
+4.  Make sure that **Method of interest** is set to `Over-Representation Analysis (ORA)`
+5.  Select **Functional Database** `geneontology`
   + you can change this later if you wish
-6.  Keep **Select Gene ID Type* as *Gene symbol*
-7.  Paste the gene symbols corresponding to DE genes in *Basal pregant vs Basal Lactation* into the Upload Gene List box.
+6.  Keep **Select Gene ID Type* as `Gene symbol`
+7.  Paste the gene symbols corresponding to DE genes in *Basal pregnant vs Basal Lactation* from your Excel spreadsheet into the Upload Gene List box.
 
 -   **The shortcut CTRL + SPACE will let you select an entire column**
-
+- Do not paste the column heading `SYMBOL`
 8. In **Select Reference Set** make sure *genome protein-coding* is selected.
 9. Click Submit
 
 
-The page that appears can give a summary of the analysis performed (i.e. the number of genes that were used as input and how many names were recognised as valid gene names) along with various visualisations. The *bar plot* shows the amount of enrichment for the pathways identified as being significant. A larger enrichment score indicates for a pathway indicates that genes are found in the list of gene names **more than you would expect by chance**. However, the pathways with the largest enrichment are not neccesarily the most significant.
+The page that appears can give a summary of the analysis performed (i.e. the number of genes that were used as input and how many names were recognised as valid gene names) along with various visualisations. The summary tab can be useful to check that you have supplied the correct kind of IDs (e.g. Gene symbol vs Ensembl, Entrez) and selected the correct organism. If few IDs are reported as being mapped, you should check your settings.
+
+The *bar plot* shows the amount of enrichment for the pathways identified as being significant. A larger enrichment score indicates for a pathway indicates that genes are found in the list of gene names **more than you would expect by chance**. However, the pathways with the largest enrichment are not necessarily the most significant.
 
 ![](media/webgestalt_2.png)
 
@@ -477,7 +477,7 @@ The table output shows details of the most over-represented pathways. Clicking o
 
 
 ::: exercise
-**Exercise:** Use WebGestalt to find enriched pathways in the Basal pregnant vs lactation analysis
+**Exercise:** Use WebGestalt to find enriched pathways in the Basal pregnant vs lactation analysis and take some time to understand the results.
 :::
 
 
@@ -488,9 +488,9 @@ This type of analysis is popular for datasets where differential expression anal
 
 ![](media/overexpressed-gsea.png)
 
-The "barcode"-like panel represents where genes from a particular pathway (**HALLMARK_E2F_TARGETS** in this case) are located in a gene list *ranked* from most up-regulated to most down-regulated. The peak in the green curve is used to indicate where the majority of genes are located. If this is shifted to the left or the right it indicates that genes belonging to this gene set have a tendancy to be up- or down-regulated.
+The "barcode"-like panel represents where genes from a particular pathway (**HALLMARK_E2F_TARGETS** in this case) are located in a gene list *ranked* from most up-regulated to most down-regulated. The peak in the green curve is used to indicate where the majority of genes are located. If this is shifted to the left or the right it indicates that genes belonging to this gene set have a tendency to be up- or down-regulated. The set of genes for a given pathway that contribute most to the enrichment are called the **leading edge**.
 
-As such, it does not rely on having to impose arbitrary cut-offs on the data. Instead, we need to provide a measure of the importance of each gene such as it's fold-change. These are then used the rank the genes.
+One reason for the popularity of this method is that it does not rely on having to impose arbitrary cut-offs on the data. Instead, we need to provide a measure of the importance of each gene such as it's fold-change. These are then used the rank the genes.
 
 The Broad institute has made this analysis method popular and provides [a version of GSEA](http://software.broadinstitute.org/gsea/index.jsp) that can be run via a java application. However, the application can be a bit fiddly to run, so we will use the Webgestalt website again
 
@@ -498,20 +498,24 @@ The Broad institute has made this analysis method popular and provides [a versio
 
 -   Open the file `background.csv` in Excel and delete all columns except the `SYMBOL` and `basal.lactation` column. <img src="media/webgestalt_4.png"/>
 -   Go to the Webgestalt website, and select **GSEA Sample Run** from the front page
--   Make sure **Method of interest** is set to *Gene Set Enrichment Analysis (GSEA)*
--  Select **Functional Database** as *geneontology*
+-   Check that **Organism of interest** is `Mus musculus`
+-   Make sure **Method of interest** is set to `Gene Set Enrichment Analysis (GSEA)`
+-  Select **Functional Database** as `geneontology`
+    + feel free to try other databases if you have time
+-  Make sure that **Select Gene ID Type** is `Gene symbol` 
 -   Paste the contents of your modified excel file into the text box under **Upload Gene List**. 
 <div class ="information">
 Do not paste the header line of **SYMBOL** and **basal.lactation** into the box
 </div>
 -   Click **Submit**
 
+The results are presented in a similar way to the ORA from the previous section. However, the enrichment scores presented can either be positive or negative - indicating that genes from a given pathway tend to up- or down-regulated. Selecting a pathway from the Table of results or bar chart will given information about the enrichment of the pathway and the *leading genes* (set of genes in the pathway responsible for the enrichment).
 
 
 <img src="media/webgestalt_5.png"/>
 
-The Rank of the gene shown is the position of the gene in the ranked list; with 1 being most up-regulated gene. The score is the score used to rank the genes (fold-change in our example). You will have to refer back to your Degust analysis to recall which biological group the fold-change is relative to.
+
 
 ::: exercise
-**Exercise:** Use Webgestalt to identify enriched pathways in the Basal Pregnant vs Lactation contrast. Compare the results from the most depleted and enriched pathways and make sure that you can interpret the barcode plot.
+**Exercise:** Use Webgestalt to identify enriched pathways in the Basal Pregnant vs Lactation contrast. Compare the results from the most extreme positive and negative enrichment score, and make sure that you can interpret corresponding the barcode plots.
 :::
