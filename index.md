@@ -37,6 +37,8 @@ email: [bioinformatics-core\@sheffield.ac.uk](bioinformatics-core@sheffield.ac.u
 - Configuring the Degust interface to perform different types of differential expression
 - The theory behind popular methods for pathways and gene set enrichment analysis
 
+**We will only be discussing BULK RNA-seq rather than single-cell**. Whilst most of techiques introduced are relevant to single-cell data, single-cell has it's own analysis issues that will be covered elsewhere.
+
 An overall workflow for the processing and analysis of RNA-seq data is given in the image below from [Ting-You Wang's RNA-seq analysis page](https://databeauty.com/blog/tutorial/2016/09/13/RNA-seq-analysis.html).
 
 ![](https://databeauty.com/figures/2016-09-13-RNA-seq-analysis/rna_seq_workflow.png)
@@ -62,7 +64,7 @@ A good overview of RNA-seq analysis can be found here
 - [StatQuest: A gentle introduction to RNA-seq](https://www.youtube.com/watch?v=tlf6wYJrwKY)
 
 
-## RNA-seq pre-processing **In brief**
+## (Bulk) RNA-seq pre-processing **In brief**
 
 We will now *briefly* describe the processes involving in turning raw sequencing data into the data that we will be using in this workshop.
 
@@ -142,6 +144,7 @@ When planning next-generation sequencing experiments, you will also need to cons
 Some recommendations on these questions and more are provided by the [Cancer Research Uk Cambridge Institute Genomics Core](https://www.cruk.cam.ac.uk/core-facilities/genomics-core/sequencing). Often the sequencing vendor performing your experiment will have some default options available.
 
 The vendor may not advise on the *sample-size*; how many samples you will be sequencing to address your biological hypothesis of interest. This is a complex question and is often influenced by practical and financial constraints. For researchers based in Sheffield, The Sheffield Bioinformatics Core is able to advise on this, and any of the other issues above. `bioinformatics-core@sheffield.ac.uk`
+
 
 # Differential expression
 

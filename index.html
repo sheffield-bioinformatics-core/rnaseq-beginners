@@ -1327,7 +1327,71 @@ if (window.hljs) {
 
 
 
-<style type="text/css">body {font-family: Calibri, helvetica, sans-serif;font-size: 150%;max-width: 2000px;}body .main-container {max-width: 900px;}a:link { color: rgb(68, 0, 153); text-decoration: underline;}h1 {color: rgb(68, 0, 153);font-size: 200%;font-weight: bold;}h2 {color: rgb(68, 0, 153);font-size: 150%;font-weight: bold;}h3 {color: rgb(68, 0, 153);font-size: 125%;font-weight: bold;}h4 {color: rgb(68, 0, 153);font-size: 100%;font-weight: bold;font-style: italic;}.title {margin-right: 200px;font-size: 100%;}.exercise{font-family: Calibri, helvetica, sans-serif;width: 100%;height: 100%;background-color: rgb(154,219,232);color: rgb(68, 0, 153);}.information{font-family: Calibri, helvetica, sans-serif;width: 100%;height: 100%;background-color: rgb(154,219,232);color: rgb(68, 0, 153);a:link { color: white; }}.warning{font-family: Calibri, helvetica, sans-serif;width: 100%;height: 100%;background-color: rgb(154,219,232);color: rgb(68, 0, 153);a:link { color: white; }}div#information a:link { color: white; }div#warning a:link { color: white; }.list-group-item.active, .list-group-item.active:focus, .list-group-item.active:hover {background-color: rgb(55, 56, 149);}</style>
+<style type="text/css">
+body {
+font-family: Calibri, helvetica, sans-serif;
+font-size: 150%;
+max-width: 2000px;
+}
+body .main-container {
+max-width: 900px;
+}
+a:link { color: rgb(68, 0, 153); text-decoration: underline;
+}
+h1 {
+color: rgb(68, 0, 153);
+font-size: 200%;
+font-weight: bold;
+}
+h2 {
+color: rgb(68, 0, 153);
+font-size: 150%;
+font-weight: bold;
+}
+h3 {
+color: rgb(68, 0, 153);
+font-size: 125%;
+font-weight: bold;
+}
+h4 {
+color: rgb(68, 0, 153);
+font-size: 100%;
+font-weight: bold;
+font-style: italic;
+}
+.title {
+margin-right: 200px;
+font-size: 100%;
+}
+.exercise{
+font-family: Calibri, helvetica, sans-serif;
+width: 100%;
+height: 100%;
+background-color: rgb(154,219,232);
+color: rgb(68, 0, 153);
+}
+.information{
+font-family: Calibri, helvetica, sans-serif;
+width: 100%;
+height: 100%;
+background-color: rgb(154,219,232);
+color: rgb(68, 0, 153);
+a:link { color: white; }
+}
+.warning{
+font-family: Calibri, helvetica, sans-serif;
+width: 100%;
+height: 100%;
+background-color: rgb(154,219,232);
+color: rgb(68, 0, 153);
+a:link { color: white; }
+}
+div#information a:link { color: white; }
+div#warning a:link { color: white; }
+.list-group-item.active, .list-group-item.active:focus, .list-group-item.active:hover {
+background-color: rgb(55, 56, 149);
+}
+</style>
 
 
 
@@ -1373,17 +1437,23 @@ overflow-y: auto;
 border: 1px solid #ddd;
 border-radius: 4px;
 }
-.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-content: "\e259";
+.tabset-dropdown > .nav-tabs > li.active:before {
+content: "";
 font-family: 'Glyphicons Halflings';
 display: inline-block;
 padding: 10px;
 border-right: 1px solid #ddd;
 }
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-content: "\e258";
-font-family: 'Glyphicons Halflings';
+content: "";
 border: none;
+}
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+content: "";
+font-family: 'Glyphicons Halflings';
+display: inline-block;
+padding: 10px;
+border-right: 1px solid #ddd;
 }
 .tabset-dropdown > .nav-tabs > li.active {
 display: block;
@@ -1523,6 +1593,10 @@ differential expression</li>
 <li>The theory behind popular methods for pathways and gene set
 enrichment analysis</li>
 </ul>
+<p><strong>We will only be discussing BULK RNA-seq rather than
+single-cell</strong>. Whilst most of techiques introduced are relevant
+to single-cell data, single-cell has it’s own analysis issues that will
+be covered elsewhere.</p>
 <p>An overall workflow for the processing and analysis of RNA-seq data
 is given in the image below from <a href="https://databeauty.com/blog/tutorial/2016/09/13/RNA-seq-analysis.html">Ting-You
 Wang’s RNA-seq analysis page</a>.</p>
@@ -1557,8 +1631,8 @@ Generation Sequencing (Illumina) An Introduction - Henrik’s Lab</a></li>
 gentle introduction to RNA-seq</a></li>
 </ul>
 </div>
-<div id="rna-seq-pre-processing-in-brief" class="section level2">
-<h2>RNA-seq pre-processing <strong>In brief</strong></h2>
+<div id="bulk-rna-seq-pre-processing-in-brief" class="section level2">
+<h2>(Bulk) RNA-seq pre-processing <strong>In brief</strong></h2>
 <p>We will now <em>briefly</em> describe the processes involving in
 turning raw sequencing data into the data that we will be using in this
 workshop.</p>
