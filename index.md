@@ -201,7 +201,7 @@ We will use a previously-published count matrix. This was downloaded from the Ge
 
 
 ::: exercise
-Download the counts from [this link](GSE60450_Lactation_forAnalysis.csv)
+Download the counts from [this link](GSE60450_Lactation-GenewiseCounts_rename_symbol.csv)
 :::
 
 ### Uploading the count matrix to Degust
