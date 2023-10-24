@@ -427,6 +427,8 @@ The ontologies are split into three categories
 
 The KEGG database also defines sets of genes. There is no defined relationship between KEGG pathways. There is however a complex network between genes belonging to the same pathway which does not exist in GO.
 
+- [e.g. Pathways in cancer](https://www.genome.jp/kegg-bin/show_pathway?hsa05200)
+
 The choice of database does not actually affect how the statistical testing works. We test of significant collections regardless of how the collections have been defined.
 
 
@@ -450,7 +452,7 @@ There are two different approaches one might use, and we will cover the theory b
 
 The question we are asking here is;
 
-> ***"Are the number of DE genes associated with Theme X significantly greater than what we might expect by chance alone?"***
+> ***"Are the number of DE genes associated with Gene Set X significantly greater than what we might expect by chance alone?"***
 
 We can answer this question by knowing
 
@@ -471,7 +473,31 @@ with:-
 |       Not in Gene Set        |                c                 |     d     |         c + d          |
 |          **Total**           |            **a + c**             | **b +d**  | **a + b + c + d (=n)** |
 
-In this first test, our genes will be grouped together according to their Gene Ontology (GO) terms:- <http://www.geneontology.org/>
+
+As a worked example, consider a Gene Set with **634** genes. After performing differential expression, we find that our list of differentially-expressed genes comprises **4595** genes. Amongst this gene list, **233** belong to our Gene Set. Plugging-in the numbers we get:-
+
+
+
+|                 | Differentially Expressed | Not Differentially Expressed |
+|-----------------|--------------------------|------------------------------|
+| In Gene Set     | 233                      | 388                          |
+| Not in Gene Set | 4362                     | 22196                        |
+
+
+Which yields a **significant p-value** with a Fishers' test.
+
+Another way of thinking about this is to *randomly* pick a set of **4595** genes (i.e. without using a p-value cut-off) and see how many belong to our gene set.
+
+
+The first time we do this, we get **100** genes in our set. The second time we get **112** and so on...
+
+If we repeat enough time we can make a histogram:-
+
+![](geneset_randomHist.png)
+
+We see that a value of 233 is extremely unlikely. In other words, using our p-value cut-off to generate our gene list has resulted in about **twice as many of our gene set than we would expect by chance**
+
+- [R script for those that are interested...](sample_geneset.R)
 
 ## Using WebGestalt for ORA
 
