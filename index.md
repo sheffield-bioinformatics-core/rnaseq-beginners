@@ -202,6 +202,11 @@ R-based methods such as `edgeR` (implemented in Degust) and `DESeq2` have their 
 
 We will use a previously-published count matrix. This was downloaded from the Gene Expression Omnibus (GEO) under the accession number [GSE60450](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE60450). Note that we have shortened the column headings and added gene symbols to help with visualisation and annotation
 
+The experimental design is as follows:-
+
+![](https://training.galaxyproject.org/training-material/topics/transcriptomics/images/rna-seq-reads-to-counts/mouse_exp.png)
+
+(image from https://training.galaxyproject.org/training-material/topics/transcriptomics/tutorials/rna-seq-reads-to-counts/tutorial.html)
 
 ::: exercise
 Download the counts from [this link](GSE60450_Lactation-GenewiseCounts_rename_symbol.csv)
@@ -485,7 +490,7 @@ There are several popular online tools for performing enrichment analysis We wil
 4.  Make sure that **Method of interest** is set to `Over-Representation Analysis (ORA)`
 5.  Select **Functional Database** `geneontology`
   + you can change this later if you wish
-6.  Keep **Select Gene ID Type* as `Gene symbol`
+6.  Keep **Select Gene ID Type** as `Gene symbol`
 7.  Paste the gene symbols corresponding to DE genes in *Basal pregnant vs Basal Lactation* from your Excel spreadsheet into the Upload Gene List box.
 
 -   **The shortcut CTRL + SPACE will let you select an entire column**
