@@ -10,7 +10,6 @@ editor_options:
   chunk_output_type: inline
 ---
 
-### Sheffield Bioinformatics Core
 
 <img src="media/logo-sm.png" align="right"/>
 
@@ -37,7 +36,7 @@ email: [bioinformatics-core\@sheffield.ac.uk](bioinformatics-core@sheffield.ac.u
 - Configuring the Degust interface to perform different types of differential expression
 - The theory behind popular methods for pathways and gene set enrichment analysis
 
-**We will only be discussing BULK RNA-seq rather than single-cell**. Whilst most of techiques introduced are relevant to single-cell data, single-cell has it's own analysis issues that will be covered elsewhere.
+**We will only be discussing BULK RNA-seq rather than single-cell**. Whilst most of techniques introduced are relevant to single-cell data, single-cell has it's own analysis issues that will be covered elsewhere.
 
 An overall workflow for the processing and analysis of RNA-seq data is given in the image below from [Ting-You Wang's RNA-seq analysis page](https://databeauty.com/blog/tutorial/2016/09/13/RNA-seq-analysis.html).
 
@@ -50,6 +49,10 @@ For those interested in alignment and QC steps, we have some materials available
 -   [Pre-processing materials](https://sbc.shef.ac.uk/ngs_intro_workshop/03-rna-seq.nb.html)
 
 **We will also have some courses on using the command-line and the nextflow workflow manager to process raw RNA-seq data.**
+
+For those that may prefer to perform analysis in R, which gives greater control over the analysis and support for reproducible analysis, we also have an more in-depth course. See our training page for details of when this course will run next
+
+- [Training index](sbc.shef.ac.uk/training)
 
 However, regardless of whatever method you use to process the data, decisions that you make before commencing sequencing can have a huge impact on the results.
 
@@ -199,6 +202,11 @@ R-based methods such as `edgeR` (implemented in Degust) and `DESeq2` have their 
 
 We will use a previously-published count matrix. This was downloaded from the Gene Expression Omnibus (GEO) under the accession number [GSE60450](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE60450). Note that we have shortened the column headings and added gene symbols to help with visualisation and annotation
 
+The experimental design is as follows:-
+
+![](https://training.galaxyproject.org/training-material/topics/transcriptomics/images/rna-seq-reads-to-counts/mouse_exp.png)
+
+(image from https://training.galaxyproject.org/training-material/topics/transcriptomics/tutorials/rna-seq-reads-to-counts/tutorial.html)
 
 ::: exercise
 Download the counts from [this link](GSE60450_Lactation-GenewiseCounts_rename_symbol.csv)
@@ -400,7 +408,32 @@ The differential expression step is concerned with being able to say with confid
 
 It can be informative to scan (manually) through the gene lists we generate through Degust and use our Biological intuition to look for themes. We might also look for previously-published genes, or genes that we have intentionally-manipulated (e.g. by knocking-out that gene). However, sometimes we can mislead ourselves into thinking our results are more significant than they really are.
 
-For example, the "cell cycle process" Gene Ontology has many hundreds of genes belonging to it. If we were to pick a set of genes **at random** of equivalent size as our list of differentially-expressed genes **we should not be surprised** to see a lot of cell-cycle genes appearing in the list. This is just due to the fact that we had a lot of possible cell-cycle genes to choose from. The key question is whether the number of cell-cycle (or any other pathway) is *more than we would expect by chance*.
+In order to infer biological significance from our data, we need some way of being able to group genes together based on their function. The two main sources of these are:-
+
+
+- [Gene Ontology](http://geneontology.org/)
+- [KEGG](https://www.genome.jp/kegg/kegg1a.html)
+
+
+The GO database defines the relationships between sets of genes in a tree-like structure starting with the most-general biological definition to increasingly specific cases.
+
+![](http://geneontology.org/assets/hexose-biosynthetic-process.png)
+
+The ontologies are split into three categories
+
+- (**MF**) Molecular Function: the molecular activities of individual gene products
+- (**CC**) Cellular Component: where the gene products are active
+- (**BP**) Biological Process: the pathways and larger processes to which that gene product’s activity contributes
+
+The KEGG database also defines sets of genes. There is no defined relationship between KEGG pathways. There is however a complex network between genes belonging to the same pathway which does not exist in GO.
+
+- [e.g. Pathways in cancer](https://www.genome.jp/kegg-bin/show_pathway?hsa05200)
+
+The choice of database does not actually affect how the statistical testing works. We test of significant collections regardless of how the collections have been defined.
+
+
+The "cell cycle process" Gene Ontology has many hundreds of genes belonging to it. If we were to pick a set of genes **at random** of equivalent size as our list of differentially-expressed genes **we should not be surprised** to see a lot of cell-cycle genes appearing in the list. This is just due to the fact that we had a lot of possible cell-cycle genes to choose from. The key question is whether the number of cell-cycle (or any other pathway) is *more than we would expect by chance*.
+
 
 In this section we will use the following files
 
@@ -419,7 +452,7 @@ There are two different approaches one might use, and we will cover the theory b
 
 The question we are asking here is;
 
-> ***"Are the number of DE genes associated with Theme X significantly greater than what we might expect by chance alone?"***
+> ***"Are the number of DE genes associated with Gene Set X significantly greater than what we might expect by chance alone?"***
 
 We can answer this question by knowing
 
@@ -440,7 +473,31 @@ with:-
 |       Not in Gene Set        |                c                 |     d     |         c + d          |
 |          **Total**           |            **a + c**             | **b +d**  | **a + b + c + d (=n)** |
 
-In this first test, our genes will be grouped together according to their Gene Ontology (GO) terms:- <http://www.geneontology.org/>
+
+As a worked example, consider a Gene Set with **634** genes. After performing differential expression, we find that our list of differentially-expressed genes comprises **4595** genes. Amongst this gene list, **233** belong to our Gene Set. Plugging-in the numbers we get:-
+
+
+
+|                 | Differentially Expressed | Not Differentially Expressed |
+|-----------------|--------------------------|------------------------------|
+| In Gene Set     | 233                      | 388                          |
+| Not in Gene Set | 4362                     | 22196                        |
+
+
+Which yields a **significant p-value** with a Fishers' test.
+
+Another way of thinking about this is to *randomly* pick a set of **4595** genes (i.e. without using a p-value cut-off) and see how many belong to our gene set.
+
+
+The first time we do this, we get **100** genes in our set. The second time we get **112** and so on...
+
+If we repeat enough time we can make a histogram:-
+
+![](geneset_randomHist.png)
+
+We see that a value of 233 is extremely unlikely. In other words, using our p-value cut-off to generate our gene list has resulted in about **twice as many of our gene set than we would expect by chance**
+
+- [R script for those that are interested...](sample_geneset.R)
 
 ## Using WebGestalt for ORA
 
@@ -459,7 +516,7 @@ There are several popular online tools for performing enrichment analysis We wil
 4.  Make sure that **Method of interest** is set to `Over-Representation Analysis (ORA)`
 5.  Select **Functional Database** `geneontology`
   + you can change this later if you wish
-6.  Keep **Select Gene ID Type* as `Gene symbol`
+6.  Keep **Select Gene ID Type** as `Gene symbol`
 7.  Paste the gene symbols corresponding to DE genes in *Basal pregnant vs Basal Lactation* from your Excel spreadsheet into the Upload Gene List box.
 
 -   **The shortcut CTRL + SPACE will let you select an entire column**
